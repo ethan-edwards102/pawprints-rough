@@ -1,88 +1,87 @@
-import Image from "next/image";
 import Link from "next/link";
-import { Mail, MapPin, Phone } from "lucide-react";
+
+const exploreLinks = [
+  { href: "/dogs", label: "Available dogs" },
+  { href: "/#adoption-process", label: "Adoption process" },
+  { href: "/", label: "About us" },
+  { href: "/#success-stories", label: "Success stories" },
+];
+
+const involvementLinks = [
+  { href: "/volunteer", label: "Foster" },
+  { href: "/volunteer", label: "Volunteer" },
+  { href: "/donate", label: "Donate" },
+  { href: "/donate", label: "Sponsor" },
+];
 
 export function SiteFooter() {
   return (
-    <footer id="contact" className="mt-auto bg-[oklch(0.28_0.035_55)] text-[oklch(0.96_0.015_85)]">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
-        <div>
-          <Image
-            src="/logo.png"
-            alt="Paw Prints Rescue & Rehoming"
-            width={331}
-            height={250}
-            className="h-24 w-auto"
-          />
-          <p className="mt-3 max-w-60 text-sm text-white/70">
-            Rescuing and rehoming stray dogs since 2012. Every dog deserves a second chance.
-          </p>
+    <footer className="bg-[oklch(0.72_0.145_62)] px-4 pb-4 text-white">
+      <div className="mx-auto max-w-6xl rounded-t-xl px-2 py-10 sm:px-0">
+        <div className="grid gap-10 lg:grid-cols-[1.3fr_0.7fr_0.7fr_0.9fr]">
+          <div>
+            <h2 className="font-heading text-2xl font-extrabold tracking-tight">Paw Prints</h2>
+            <p className="mt-3 max-w-sm text-sm font-medium leading-6 text-white/78">
+              Rescuing, rehabilitating and rehoming dogs across Cape Town. Every second chance
+              starts with someone choosing to help.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-heading text-sm font-extrabold">Explore</h3>
+            <ul className="mt-3 space-y-2 text-sm font-medium text-white/78">
+              {exploreLinks.map((link) => (
+                <li key={link.label}>
+                  <Link href={link.href} className="hover:text-white">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-heading text-sm font-extrabold">Get involved</h3>
+            <ul className="mt-3 space-y-2 text-sm font-medium text-white/78">
+              {involvementLinks.map((link) => (
+                <li key={link.label}>
+                  <Link href={link.href} className="hover:text-white">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-heading text-sm font-extrabold">Contact</h3>
+            <ul className="mt-3 space-y-2 text-sm font-medium text-white/78">
+              <li>hello@pawprints.org.za</li>
+              <li>021 555 0148</li>
+              <li>Emergency: 082 555 0199</li>
+              <li>14 Kennel Lane, Milnerton</li>
+              <li>Mon-Fri 09:00-17:00</li>
+            </ul>
+          </div>
         </div>
 
-        <div>
-          <h3 className="mb-3 font-heading text-sm font-semibold uppercase tracking-wider text-white/50">
-            Visit us
-          </h3>
-          <ul className="space-y-2 text-sm text-white/80">
-            <li className="flex items-start gap-2">
-              <MapPin className="mt-0.5 size-4 shrink-0" />
-              14 Kennel Lane, Milnerton, Cape Town, 7441
-            </li>
-            <li className="flex items-center gap-2">
-              <Phone className="size-4 shrink-0" />
-              021&nbsp;555&nbsp;0148
-            </li>
-            <li className="flex items-center gap-2">
-              <Mail className="size-4 shrink-0" />
-              hello@pawprints.org.za
-            </li>
-          </ul>
-        </div>
+        <p className="mt-12 font-heading text-[22vw] font-extrabold leading-[0.75] tracking-tight text-white sm:text-[9rem] lg:text-[12rem]">
+          PAW PRINTS
+        </p>
 
-        <div>
-          <h3 className="mb-3 font-heading text-sm font-semibold uppercase tracking-wider text-white/50">
-            Get involved
-          </h3>
-          <ul className="space-y-2 text-sm">
-            <li>
-              <Link href="/dogs" className="text-white/80 hover:text-white">
-                Adopt a dog
-              </Link>
-            </li>
-            <li>
-              <Link href="/matcher" className="text-white/80 hover:text-white">
-                Find your match
-              </Link>
-            </li>
-            <li>
-              <Link href="/volunteer" className="text-white/80 hover:text-white">
-                Volunteer with us
-              </Link>
-            </li>
-            <li>
-              <Link href="/donate" className="text-white/80 hover:text-white">
-                Make a donation
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 className="mb-3 font-heading text-sm font-semibold uppercase tracking-wider text-white/50">
-            Hours
-          </h3>
-          <ul className="space-y-2 text-sm text-white/80">
-            <li>Mon – Fri: 09:00 – 17:00</li>
-            <li>Sat – Sun: 09:00 – 14:00</li>
-            <li>Public holidays: 10:00 – 13:00</li>
-          </ul>
-        </div>
-      </div>
-
-      <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-white/50 sm:flex-row">
-          <p>© 2026 Paw Prints Rescue &amp; Rehoming NPC. Registered NPO 123-456.</p>
-          <p>This is a rough draft for review — content is placeholder.</p>
+        <div className="mt-8 flex flex-col gap-3 border-t border-white/18 pt-5 text-xs font-semibold text-white/70 sm:flex-row sm:items-center sm:justify-between">
+          <p>Registered NPO 123-456 | © 2026 Paw Prints Rescue &amp; Rehoming NPC.</p>
+          <div className="flex flex-wrap gap-5">
+            <Link href="/" className="hover:text-white">
+              Privacy policy
+            </Link>
+            <Link href="/" className="hover:text-white">
+              Instagram
+            </Link>
+            <Link href="/" className="hover:text-white">
+              Facebook
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

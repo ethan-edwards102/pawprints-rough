@@ -1,50 +1,32 @@
 import Image from "next/image";
 import Link from "next/link";
-import {
-  Dog as DogIcon,
-  HandHeart,
-  Home as HomeIcon,
-  Mail,
-  MapPin,
-  Phone,
-  Stethoscope,
-} from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { FeaturedDogs } from "@/components/featured-dogs";
 import { SuccessStories } from "@/components/success-stories";
 
-const activities = [
+const waysToHelp = [
   {
-    icon: DogIcon,
-    title: "Rescue",
+    title: "Foster",
+    href: "/volunteer",
+    image: "/images/puppies/puppy2.jpg",
     detail:
-      "We respond to reports of stray, abandoned and mistreated dogs across the Cape metro, bringing them to safety at our Milnerton shelter.",
+      "Open your home temporarily and give a dog the calm, everyday care they need while they wait.",
   },
   {
-    icon: Stethoscope,
-    title: "Rehabilitate",
+    title: "Volunteer",
+    href: "/volunteer",
+    image: "/images/puppies/puppy4.jpg",
     detail:
-      "Every rescue is vaccinated, sterilised and given the veterinary and behavioural care they need to be ready for a new family.",
+      "Help with walks, enrichment, events, transport and the behind-the-scenes work that keeps rescue moving.",
   },
   {
-    icon: HomeIcon,
-    title: "Rehome",
+    title: "Donate",
+    href: "/donate",
+    image: "/images/puppies/puppy6.jpg",
     detail:
-      "We carefully match dogs with adopters — over 1,400 dogs have found their forever homes with us since 2012.",
-  },
-  {
-    icon: HandHeart,
-    title: "Reach out",
-    detail:
-      "We run free sterilisation drives and school programmes to tackle the stray problem at its root.",
+      "Fund food, veterinary care, safe shelter and second chances for the dogs who need us most.",
   },
 ];
 
@@ -127,6 +109,27 @@ const rescueJourneyCards = [
   },
 ];
 
+const galleryColumns = [
+  [
+    "/images/puppies/puppy1.jpg",
+    "/images/puppies/puppy4.jpg",
+    "/images/heroImg.jpg",
+    "/images/puppies/puppy2.jpg",
+  ],
+  [
+    "/images/heroImg.jpg",
+    "/images/puppies/puppy3.jpg",
+    "/images/puppies/puppy6.jpg",
+    "/images/puppies/puppy5.jpg",
+  ],
+  [
+    "/images/puppies/puppy2.jpg",
+    "/images/puppies/puppy5.jpg",
+    "/images/puppies/puppy1.jpg",
+    "/images/heroImg.jpg",
+  ],
+];
+
 export default function Home() {
   return (
     <>
@@ -189,7 +192,7 @@ export default function Home() {
       <FeaturedDogs />
 
       {/* Adoption process */}
-      <section className="bg-[oklch(0.985_0.012_85)]">
+      <section id="adoption-process" className="bg-[oklch(0.985_0.012_85)]">
         <div className="mx-auto max-w-6xl px-4 pb-16 sm:pb-20">
           <div className="max-w-3xl">
             <h2 className="font-heading text-4xl font-extrabold tracking-tight text-[oklch(0.28_0.035_55)] sm:text-5xl">
@@ -323,79 +326,161 @@ export default function Home() {
 
       <SuccessStories />
 
-      {/* What Paw Prints does */}
-      <section className="bg-secondary/50">
-        <div className="mx-auto max-w-6xl px-4 py-16">
-          <h2 className="font-heading text-3xl font-bold tracking-tight">What Paw Prints does</h2>
-          <p className="mt-2 max-w-2xl text-muted-foreground">
-            From the first rescue call to the final tail-wagging goodbye, we walk every step with
-            our dogs.
-          </p>
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {activities.map((activity) => (
-              <Card key={activity.title}>
-                <CardHeader>
-                  <span className="mb-1 flex size-10 items-center justify-center rounded-xl bg-primary/15 text-primary">
-                    <activity.icon className="size-5" />
-                  </span>
-                  <CardTitle>{activity.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
-                  {activity.detail}
-                </CardContent>
-              </Card>
+      {/* Ways to help */}
+      <section className="bg-[oklch(0.985_0.012_85)]">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
+          <div className="max-w-3xl">
+            <h2 className="font-heading text-4xl font-extrabold tracking-tight text-[oklch(0.28_0.035_55)] sm:text-5xl">
+              You do not have to adopt to change a life.
+            </h2>
+          </div>
+          <div className="mt-10 grid gap-5 md:grid-cols-3">
+            {waysToHelp.map((way) => (
+              <Link
+                href={way.href}
+                key={way.title}
+                className="group relative min-h-[26rem] overflow-hidden rounded-xl bg-[oklch(0.28_0.035_55)] text-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-[oklch(0.72_0.145_62)]/15"
+              >
+                <Image
+                  src={way.image}
+                  alt=""
+                  fill
+                  sizes="(min-width: 768px) 33vw, 100vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.04)_0%,rgba(0,0,0,0.22)_48%,rgba(0,0,0,0.76)_100%)]" />
+                <div className="absolute inset-x-0 bottom-0 p-6">
+                  <h3 className="font-heading text-4xl font-extrabold tracking-tight">
+                    {way.title}
+                  </h3>
+                  <p className="mt-3 text-sm font-semibold leading-6 text-white/84">
+                    {way.detail}
+                  </p>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
       {/* Contact */}
-      <section className="mx-auto max-w-6xl px-4 py-16">
-        <div className="grid items-center gap-8 lg:grid-cols-2">
-          <div>
-            <h2 className="font-heading text-3xl font-bold tracking-tight">Get in touch</h2>
-            <p className="mt-2 max-w-md text-muted-foreground">
+      <section id="contact" className="bg-[oklch(0.985_0.012_85)]">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
+          <div className="grid gap-6 lg:grid-cols-[1fr_0.65fr] lg:items-end">
+            <h2 className="font-heading text-4xl font-extrabold tracking-tight text-[oklch(0.28_0.035_55)] sm:text-5xl">
+              Get in touch
+            </h2>
+            <p className="max-w-md text-base font-medium leading-7 text-muted-foreground lg:justify-self-end">
               Found a stray? Want to visit the shelter? Have a question about adoption? We would
               love to hear from you.
             </p>
-            <ul className="mt-6 space-y-3 text-sm">
-              <li className="flex items-center gap-3">
-                <span className="flex size-9 items-center justify-center rounded-lg bg-primary/15 text-primary">
-                  <Phone className="size-4" />
-                </span>
-                021&nbsp;555&nbsp;0148 (emergencies: 082&nbsp;555&nbsp;0199)
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="flex size-9 items-center justify-center rounded-lg bg-primary/15 text-primary">
-                  <Mail className="size-4" />
-                </span>
-                hello@pawprints.org.za
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="flex size-9 items-center justify-center rounded-lg bg-primary/15 text-primary">
-                  <MapPin className="size-4" />
-                </span>
-                14 Kennel Lane, Milnerton, Cape Town
-              </li>
-            </ul>
           </div>
-          <Card>
-            <CardHeader>
-              <CardTitle>Ready to change a life?</CardTitle>
-              <CardDescription>
-                Adoption, volunteering or a donation — every bit of help finds a dog a home.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-wrap gap-3">
-              <Button nativeButton={false} render={<Link href="/dogs" />}>Browse dogs</Button>
-              <Button variant="secondary" nativeButton={false} render={<Link href="/volunteer" />}>
-                Volunteer
-              </Button>
-              <Button variant="outline" nativeButton={false} render={<Link href="/donate" />}>
-                Donate
-              </Button>
-            </CardContent>
-          </Card>
+
+          <div className="mt-10 grid gap-3 lg:grid-cols-[0.95fr_1fr]">
+            <div className="relative min-h-[26rem] overflow-hidden rounded-xl bg-[oklch(0.28_0.035_55)] p-8 text-center text-white">
+              <Image
+                src="/images/heroImg.jpg"
+                alt=""
+                fill
+                sizes="(min-width: 1024px) 520px, 100vw"
+                className="object-cover blur-[1px]"
+              />
+              <div className="absolute inset-0 bg-[oklch(0.28_0.035_55)]/50" />
+              <div className="relative z-10 flex h-full flex-col items-center justify-center">
+                <p className="max-w-xs font-heading text-4xl font-extrabold leading-tight">
+                  Ready to change a life?
+                </p>
+              </div>
+            </div>
+
+            <form className="rounded-xl border border-[oklch(0.89_0.025_80)] bg-white/70 p-6 shadow-sm sm:p-8">
+              <div className="grid gap-4">
+                <label className="grid gap-2 text-xs font-bold text-[oklch(0.28_0.035_55)]">
+                  Name
+                  <input className="h-11 rounded-lg border border-[oklch(0.89_0.025_80)] bg-white px-3 text-sm font-medium outline-none focus:border-[oklch(0.72_0.145_62)]" placeholder="Jane Smith" />
+                </label>
+                <label className="grid gap-2 text-xs font-bold text-[oklch(0.28_0.035_55)]">
+                  Email
+                  <input className="h-11 rounded-lg border border-[oklch(0.89_0.025_80)] bg-white px-3 text-sm font-medium outline-none focus:border-[oklch(0.72_0.145_62)]" placeholder="jane@example.com" />
+                </label>
+                <label className="grid gap-2 text-xs font-bold text-[oklch(0.28_0.035_55)]">
+                  How can we help?
+                  <textarea className="min-h-28 rounded-lg border border-[oklch(0.89_0.025_80)] bg-white px-3 py-3 text-sm font-medium outline-none focus:border-[oklch(0.72_0.145_62)]" placeholder="Tell us what you need..." />
+                </label>
+                <Button className="mt-2 h-11 rounded-xl bg-[oklch(0.72_0.145_62)] text-white hover:bg-[oklch(0.66_0.15_58)]">
+                  Send message
+                </Button>
+              </div>
+            </form>
+          </div>
+
+          <div className="mt-5 grid gap-3 md:grid-cols-3">
+            {[
+              { icon: Phone, title: "Call us", detail: "021 555 0148 / 082 555 0199" },
+              { icon: Mail, title: "Email us", detail: "hello@pawprints.org.za" },
+              { icon: MapPin, title: "Find us", detail: "14 Kennel Lane, Milnerton, Cape Town" },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="rounded-xl border border-[oklch(0.89_0.025_80)] bg-white/70 p-5 shadow-sm"
+              >
+                <item.icon className="size-5 text-[oklch(0.72_0.145_62)]" />
+                <p className="mt-3 font-heading text-lg font-extrabold">{item.title}</p>
+                <p className="mt-1 text-sm font-medium text-muted-foreground">{item.detail}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Scrolling dog gallery */}
+      <section className="overflow-hidden bg-[oklch(0.985_0.012_85)] px-4 pb-10">
+        <div className="mx-auto grid max-w-6xl gap-1 sm:grid-cols-3">
+          {galleryColumns.map((column, columnIndex) => (
+            <div
+              key={columnIndex}
+              className={[
+                "gallery-column hidden gap-1 sm:flex sm:flex-col",
+                columnIndex === 1 ? "gallery-column-down" : "gallery-column-up",
+              ].join(" ")}
+            >
+              {[...column, ...column].map((src, index) => (
+                <div
+                  key={`${src}-${index}`}
+                  className={[
+                    "relative overflow-hidden rounded-lg",
+                    index % 3 === 0 ? "h-64" : index % 3 === 1 ? "h-80" : "h-56",
+                  ].join(" ")}
+                >
+                  <Image src={src} alt="" fill sizes="33vw" className="object-cover" />
+                </div>
+              ))}
+            </div>
+          ))}
+          <div className="grid gap-1 sm:hidden">
+            {galleryColumns.flat().slice(0, 6).map((src, index) => (
+              <div key={`${src}-${index}`} className="relative h-64 overflow-hidden rounded-lg">
+                <Image src={src} alt="" fill sizes="100vw" className="object-cover" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Bottom CTA */}
+      <section className="bg-[oklch(0.985_0.012_85)] px-4 pb-10">
+        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 rounded-xl bg-[oklch(0.72_0.145_62)] p-8 text-white sm:p-10 lg:flex-row lg:items-center">
+          <h2 className="max-w-2xl font-heading text-4xl font-extrabold tracking-tight sm:text-5xl">
+            Their next chapter could begin with you.
+          </h2>
+          <div className="flex flex-wrap gap-3">
+            <Button nativeButton={false} render={<Link href="/dogs" />} className="bg-white text-[oklch(0.72_0.145_62)] hover:bg-white/90">
+              Meet the dogs
+            </Button>
+            <Button nativeButton={false} render={<Link href="/donate" />} variant="outline" className="border-white/35 bg-transparent text-white hover:bg-white/14 hover:text-white">
+              Donate
+            </Button>
+          </div>
         </div>
       </section>
     </>

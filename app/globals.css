@@ -143,6 +143,19 @@
   .perspective-dramatic {
     perspective: 1400px;
   }
+
+  .gallery-column {
+    max-height: 48rem;
+    overflow: hidden;
+  }
+
+  .gallery-column-up {
+    animation: gallery-up 46s linear infinite;
+  }
+
+  .gallery-column-down {
+    animation: gallery-down 52s linear infinite;
+  }
 }
 
 @keyframes hero-marquee {
@@ -165,9 +178,29 @@
   }
 }
 
+@keyframes gallery-up {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes gallery-down {
+  from {
+    transform: translateY(-50%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-marquee,
-  .adoption-story-card {
+  .adoption-story-card,
+  .gallery-column-up,
+  .gallery-column-down {
     animation: none;
   }
 }

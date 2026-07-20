@@ -32,7 +32,7 @@ export function SuccessStories() {
   }
 
   return (
-    <section className="bg-[oklch(0.985_0.012_85)]">
+    <section id="success-stories" className="bg-[oklch(0.985_0.012_85)]">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1fr] lg:items-end">
           <div>
