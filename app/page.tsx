@@ -6,11 +6,9 @@ import {
   Mail,
   MapPin,
   Phone,
-  Quote,
   Stethoscope,
 } from "lucide-react";
 
-import { DogPhoto } from "@/components/dog-photo";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,7 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { adopterStories } from "@/lib/data";
+import { FeaturedDogs } from "@/components/featured-dogs";
 
 const activities = [
   {
@@ -116,49 +114,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Values strip */}
-      <section className="border-b bg-secondary/50">
-        <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 text-center sm:grid-cols-3">
-          <div>
-            <p className="font-heading text-3xl font-bold text-primary">1,400+</p>
-            <p className="text-sm text-muted-foreground">dogs rehomed since 2012</p>
-          </div>
-          <div>
-            <p className="font-heading text-3xl font-bold text-primary">60</p>
-            <p className="text-sm text-muted-foreground">dogs in our care right now</p>
-          </div>
-          <div>
-            <p className="font-heading text-3xl font-bold text-primary">100%</p>
-            <p className="text-sm text-muted-foreground">volunteer-run, donation-funded</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Adopter stories */}
-      <section className="mx-auto max-w-6xl px-4 py-16">
-        <h2 className="font-heading text-3xl font-bold tracking-tight">Adopter stories</h2>
-        <p className="mt-2 max-w-2xl text-muted-foreground">
-          The best part of our work is the happy endings. Here are three of them.
-        </p>
-        <div className="mt-8 grid gap-6 md:grid-cols-3">
-          {adopterStories.map((story) => (
-            <Card key={story.id} className="overflow-hidden pt-0">
-              <DogPhoto hue={story.photoHue} className="h-40 w-full" />
-              <CardHeader>
-                <CardTitle>
-                  {story.adopter} &amp; {story.dogName}
-                </CardTitle>
-                <CardDescription className="flex gap-2">
-                  <Quote className="size-4 shrink-0 text-primary" />
-                  <span className="italic">{story.quote}</span>
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="text-sm text-muted-foreground">{story.detail}</CardContent>
-            </Card>
-          ))}
-        </div>
-      </section>
-
+      <FeaturedDogs />
       {/* What Paw Prints does */}
       <section className="bg-secondary/50">
         <div className="mx-auto max-w-6xl px-4 py-16">
