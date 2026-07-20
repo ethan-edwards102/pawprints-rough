@@ -87,6 +87,45 @@ const adoptionSteps = [
   },
 ];
 
+const rescueJourneyCards = [
+  {
+    number: "01",
+    title: "Rescue",
+    image: "/images/puppies/puppy2.jpg",
+    cardClassName: "bg-[oklch(0.72_0.145_62)] text-white",
+    copyClassName: "text-white/88",
+    detail:
+      "We respond to reports of abandoned, neglected and stray dogs, bringing them into safety and assessing their immediate needs.",
+  },
+  {
+    number: "02",
+    title: "Recover",
+    image: "/images/puppies/puppy4.jpg",
+    cardClassName: "bg-[oklch(0.28_0.035_55)] text-white",
+    copyClassName: "text-white/86",
+    detail:
+      "Each dog receives veterinary care, nutrition, sterilisation and the time needed to regain their physical strength.",
+  },
+  {
+    number: "03",
+    title: "Rebuild trust",
+    image: "/images/puppies/puppy5.jpg",
+    cardClassName: "bg-[oklch(0.94_0.03_82)] text-[oklch(0.28_0.035_55)]",
+    copyClassName: "text-[oklch(0.36_0.045_55)]",
+    detail:
+      "Patient handling, enrichment and behavioural support help dogs feel safe around people and prepare for family life.",
+  },
+  {
+    number: "04",
+    title: "Rehome",
+    image: "/images/puppies/puppy6.jpg",
+    cardClassName: "bg-white text-[oklch(0.28_0.035_55)] ring-1 ring-[oklch(0.89_0.025_80)]",
+    copyClassName: "text-muted-foreground",
+    detail:
+      "Once a dog is ready, Paw Prints carefully matches them with a household suited to their temperament, needs and energy level.",
+  },
+];
+
 export default function Home() {
   return (
     <>
@@ -162,7 +201,7 @@ export default function Home() {
           </div>
 
           <div className="mt-10 grid gap-5 md:grid-cols-2">
-            {adoptionSteps.map((step, index) => (
+            {adoptionSteps.map((step) => (
               <article
                 key={step.number}
                 className="group relative overflow-hidden rounded-xl bg-white p-6 text-[oklch(0.28_0.035_55)] shadow-sm ring-1 ring-[oklch(0.89_0.025_80)] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[oklch(0.72_0.145_62)]/10 sm:p-8"
@@ -172,14 +211,7 @@ export default function Home() {
                     <span className="rounded-full bg-[oklch(0.72_0.145_62)] px-3 py-1 text-sm font-extrabold text-white">
                       {step.number}
                     </span>
-                    <div
-                      className={[
-                        "flex size-24 items-center justify-center rounded-2xl bg-[oklch(0.72_0.145_62)] shadow-lg shadow-[oklch(0.72_0.145_62)]/20 transition-transform duration-500 group-hover:-translate-y-2 group-hover:rotate-3 group-hover:scale-105",
-                        index === 1
-                          ? "bg-[oklch(0.72_0.145_62)]"
-                          : "bg-[oklch(0.72_0.145_62)]",
-                      ].join(" ")}
-                    >
+                    <div className="flex size-24 items-center justify-center rounded-2xl bg-[oklch(0.72_0.145_62)] shadow-lg shadow-[oklch(0.72_0.145_62)]/20 transition-transform duration-500 group-hover:-translate-y-2 group-hover:rotate-3 group-hover:scale-105">
                       <Image
                         src={step.icon}
                         alt=""
@@ -196,6 +228,79 @@ export default function Home() {
                     <p className="mt-3 max-w-xl text-sm font-medium leading-6 text-muted-foreground">
                       {step.detail}
                     </p>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="mt-8 flex justify-center">
+            <Button
+              size="lg"
+              nativeButton={false}
+              render={<Link href="/dogs" />}
+              className="h-11 rounded-xl bg-[oklch(0.72_0.145_62)] px-6 text-white shadow-lg shadow-[oklch(0.72_0.145_62)]/20 hover:bg-[oklch(0.66_0.15_58)]"
+            >
+              View dogs available for adoption
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Rescue journey */}
+      <section className="bg-[oklch(0.985_0.012_85)]">
+        <div className="mx-auto max-w-6xl px-4 pb-16 sm:pb-24">
+          <div className="max-w-3xl">
+            <h2 className="font-heading text-4xl font-extrabold tracking-tight text-[oklch(0.28_0.035_55)] sm:text-5xl">
+              What a second chance looks like.
+            </h2>
+            <p className="mt-4 text-base leading-7 text-muted-foreground sm:text-lg">
+              Every dog follows a different path, but the goal remains the same: safety, recovery
+              and the right home.
+            </p>
+          </div>
+
+          <div className="mt-10 space-y-6 lg:space-y-10">
+            {rescueJourneyCards.map((step, index) => (
+              <article
+                key={step.number}
+                className={[
+                  "adoption-story-card group sticky overflow-hidden rounded-[1.4rem] p-6 shadow-2xl shadow-black/10 sm:p-8 lg:min-h-[32rem] lg:p-10",
+                  step.cardClassName,
+                ].join(" ")}
+                style={{ top: `${7 + index * 1.25}rem`, zIndex: 10 + index }}
+              >
+                <div className="grid min-h-[30rem] gap-8 lg:grid-cols-[0.7fr_1.3fr]">
+                  <div className="relative z-10">
+                    <span className="font-heading text-7xl font-extrabold leading-none tracking-tight text-current sm:text-8xl">
+                      {step.number}
+                    </span>
+                  </div>
+
+                  <div className="relative z-10 flex flex-col">
+                    <div className="max-w-xl lg:ml-auto lg:w-full">
+                      <h3 className="font-heading text-4xl font-extrabold leading-none tracking-tight sm:text-5xl">
+                        {step.title}
+                      </h3>
+                      <p
+                        className={[
+                          "mt-5 text-base font-semibold leading-7 sm:text-lg",
+                          step.copyClassName,
+                        ].join(" ")}
+                      >
+                        {step.detail}
+                      </p>
+                    </div>
+
+                    <div className="relative mt-10 min-h-[16rem] overflow-hidden rounded-xl shadow-2xl shadow-black/20 lg:ml-auto lg:mt-auto lg:h-72 lg:w-[88%]">
+                      <Image
+                        src={step.image}
+                        alt=""
+                        fill
+                        sizes="(min-width: 1024px) 560px, 100vw"
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    </div>
                   </div>
                 </div>
               </article>

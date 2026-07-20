@@ -133,6 +133,12 @@
   .hero-marquee {
     animation: hero-marquee 26s linear infinite;
   }
+
+  .adoption-story-card {
+    animation: adoption-card-enter both ease-out;
+    animation-timeline: view();
+    animation-range: entry 0% cover 34%;
+  }
 }
 
 @keyframes hero-marquee {
@@ -141,5 +147,23 @@
   }
   to {
     transform: translateX(-50%);
+  }
+}
+
+@keyframes adoption-card-enter {
+  from {
+    opacity: 0.72;
+    transform: translateY(3rem) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-marquee,
+  .adoption-story-card {
+    animation: none;
   }
 }
