@@ -1,9 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   Dog as DogIcon,
   HandHeart,
-  Heart,
   Home as HomeIcon,
   Mail,
   MapPin,
@@ -50,46 +48,70 @@ const activities = [
   },
 ];
 
+const heroMarqueeItems = [
+  "Rescue and rehabilitation",
+  "Adoption support",
+  "Volunteer powered",
+  "Dogs currently in care",
+  "Rehomed since 2012",
+  "Donation funded",
+];
+
 export default function Home() {
   return (
     <>
-      {/* Hero: title + mission statement */}
-      <section className="bg-[oklch(0.28_0.035_55)] text-[oklch(0.97_0.015_85)]">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 sm:py-24 lg:grid-cols-[1.2fr_1fr]">
-          <div>
-            <h1 className="font-heading text-4xl font-bold tracking-tight sm:text-5xl">
-              Every stray deserves a<span className="text-[oklch(0.85_0.16_95)]"> second chance</span>
-            </h1>
-            <p className="mt-5 max-w-xl text-lg text-white/80">
-              Paw Prints Rescue &amp; Rehoming rescues stray and abandoned dogs, restores their
-              health and trust, and matches them with loving families. Our mission is simple: no
-              dog left behind, no kennel a forever home.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Button size="lg" nativeButton={false} render={<Link href="/dogs" />}>
-                <DogIcon data-icon="inline-start" />
-                Meet our dogs
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white"
-                nativeButton={false} render={<Link href="/donate" />}
-              >
-                <Heart data-icon="inline-start" />
-                Donate
-              </Button>
-            </div>
+      {/* Hero */}
+      <section className="relative isolate flex min-h-svh overflow-hidden bg-[oklch(0.32_0.05_55)] text-white">
+        <div
+          className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.12)_0%,rgba(0,0,0,0.16)_42%,rgba(0,0,0,0.36)_100%),linear-gradient(135deg,rgba(59,112,168,0.85)_0%,rgba(196,143,87,0.72)_48%,rgba(41,67,53,0.82)_100%)] bg-cover bg-[position:center_78%] sm:bg-[position:center_80%] lg:bg-[position:center_76%]"
+          style={{
+            backgroundImage:
+              "linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.16) 42%, rgba(0,0,0,0.38) 100%), url('/images/heroImg.jpg')",
+          }}
+          aria-hidden="true"
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0)_0%,rgba(0,0,0,0.18)_68%,rgba(0,0,0,0.32)_100%)]" aria-hidden="true" />
+
+        <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center justify-center px-4 pb-28 pt-32 text-center sm:pb-32 sm:pt-40">
+          <h1 className="max-w-4xl font-heading text-5xl font-extrabold leading-[0.95] tracking-tight text-white drop-shadow-md sm:text-6xl lg:text-7xl">
+            Every dog deserves somewhere to belong.
+          </h1>
+          <p className="mt-6 max-w-2xl text-base font-medium leading-7 text-white/86 drop-shadow sm:text-lg">
+            We rescue, rehabilitate and rehome abandoned dogs, giving each one the care and time
+            they need to begin again.
+          </p>
+          <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row">
+            <Button
+              size="lg"
+              nativeButton={false}
+              render={<Link href="/dogs" />}
+              className="h-11 min-w-40 rounded-xl bg-[oklch(0.72_0.145_62)] px-6 text-white shadow-lg shadow-black/15 hover:bg-[oklch(0.66_0.15_58)]"
+            >
+              Meet the dogs
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="h-11 min-w-40 rounded-xl border-white/35 bg-black/10 px-6 text-white shadow-lg shadow-black/10 backdrop-blur-md hover:bg-white/14 hover:text-white"
+              nativeButton={false}
+              render={<Link href="/donate" />}
+            >
+              Support Paw Prints
+            </Button>
           </div>
-          <div className="hidden justify-center lg:flex">
-            <Image
-              src="/logo.png"
-              alt="Paw Prints logo"
-              width={331}
-              height={250}
-              priority
-              className="w-72 drop-shadow-lg"
-            />
+        </div>
+
+        <div className="absolute inset-x-0 bottom-0 z-20 overflow-hidden bg-[oklch(0.72_0.145_62)] py-4 text-white">
+          <div className="hero-marquee flex w-max items-center gap-9 whitespace-nowrap">
+            {[...heroMarqueeItems, ...heroMarqueeItems].map((item, index) => (
+              <span
+                key={`${item}-${index}`}
+                className="flex items-center gap-9 font-heading text-lg font-extrabold tracking-tight sm:text-xl"
+              >
+                {item}
+                <span className="size-2 rounded-full bg-white/80" aria-hidden="true" />
+              </span>
+            ))}
           </div>
         </div>
       </section>
