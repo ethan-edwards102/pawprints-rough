@@ -19,6 +19,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { FeaturedDogs } from "@/components/featured-dogs";
+import { SuccessStories } from "@/components/success-stories";
 
 const activities = [
   {
@@ -319,6 +320,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <SuccessStories />
 
       {/* What Paw Prints does */}
       <section className="bg-secondary/50">

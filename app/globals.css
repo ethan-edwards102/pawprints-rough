@@ -139,6 +139,10 @@
     animation-timeline: view();
     animation-range: entry 0% cover 34%;
   }
+
+  .perspective-dramatic {
+    perspective: 1400px;
+  }
 }
 
 @keyframes hero-marquee {
