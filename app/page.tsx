@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   Dog as DogIcon,
@@ -53,6 +54,37 @@ const heroMarqueeItems = [
   "Dogs currently in care",
   "Rehomed since 2012",
   "Donation funded",
+];
+
+const adoptionSteps = [
+  {
+    number: "01",
+    title: "Explore",
+    icon: "/images/icons/magnifying-glass.png",
+    detail:
+      "Browse the dogs currently available and learn about their personalities, needs and ideal homes.",
+  },
+  {
+    number: "02",
+    title: "Apply",
+    icon: "/images/icons/document.png",
+    detail:
+      "Complete a short application so the team can understand your household, lifestyle and experience with dogs.",
+  },
+  {
+    number: "03",
+    title: "Meet",
+    icon: "/images/icons/handshake.png",
+    detail:
+      "Meet the dog, spend time together and complete the home and compatibility assessment.",
+  },
+  {
+    number: "04",
+    title: "Take them home",
+    icon: "/images/icons/dog-paw.png",
+    detail:
+      "Once the match is approved, complete the adoption and welcome your new companion home.",
+  },
 ];
 
 export default function Home() {
@@ -115,6 +147,74 @@ export default function Home() {
       </section>
 
       <FeaturedDogs />
+
+      {/* Adoption process */}
+      <section className="bg-[oklch(0.985_0.012_85)]">
+        <div className="mx-auto max-w-6xl px-4 pb-16 sm:pb-20">
+          <div className="max-w-3xl">
+            <h2 className="font-heading text-4xl font-extrabold tracking-tight text-[oklch(0.28_0.035_55)] sm:text-5xl">
+              Finding the right home, not just the first home.
+            </h2>
+            <p className="mt-4 text-base leading-7 text-muted-foreground sm:text-lg">
+              Our adoption process is designed to make sure every dog is matched with a home suited
+              to their personality, needs and energy level.
+            </p>
+          </div>
+
+          <div className="mt-10 grid gap-5 md:grid-cols-2">
+            {adoptionSteps.map((step, index) => (
+              <article
+                key={step.number}
+                className="group relative overflow-hidden rounded-xl bg-white p-6 text-[oklch(0.28_0.035_55)] shadow-sm ring-1 ring-[oklch(0.89_0.025_80)] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[oklch(0.72_0.145_62)]/10 sm:p-8"
+              >
+                <div className="flex min-h-64 flex-col justify-between gap-10">
+                  <div className="flex items-start justify-between gap-6">
+                    <span className="rounded-full bg-[oklch(0.72_0.145_62)] px-3 py-1 text-sm font-extrabold text-white">
+                      {step.number}
+                    </span>
+                    <div
+                      className={[
+                        "flex size-24 items-center justify-center rounded-2xl bg-[oklch(0.72_0.145_62)] shadow-lg shadow-[oklch(0.72_0.145_62)]/20 transition-transform duration-500 group-hover:-translate-y-2 group-hover:rotate-3 group-hover:scale-105",
+                        index === 1
+                          ? "bg-[oklch(0.72_0.145_62)]"
+                          : "bg-[oklch(0.72_0.145_62)]",
+                      ].join(" ")}
+                    >
+                      <Image
+                        src={step.icon}
+                        alt=""
+                        width={72}
+                        height={72}
+                        className="size-16 object-contain drop-shadow-sm"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="font-heading text-3xl font-extrabold tracking-tight">
+                      {step.title}
+                    </h3>
+                    <p className="mt-3 max-w-xl text-sm font-medium leading-6 text-muted-foreground">
+                      {step.detail}
+                    </p>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="mt-8 flex justify-center">
+            <Button
+              size="lg"
+              nativeButton={false}
+              render={<Link href="/dogs" />}
+              className="h-11 rounded-xl bg-[oklch(0.72_0.145_62)] px-6 text-white shadow-lg shadow-[oklch(0.72_0.145_62)]/20 hover:bg-[oklch(0.66_0.15_58)]"
+            >
+              View dogs available for adoption
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* What Paw Prints does */}
       <section className="bg-secondary/50">
         <div className="mx-auto max-w-6xl px-4 py-16">
