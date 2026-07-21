@@ -1,20 +1,13 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Heart, Pencil, Plus, SearchX } from "lucide-react";
 
-import { DogPhoto } from "@/components/dog-photo";
 import { DogFormDialog, type DogFormValues } from "@/components/dogs/dog-form-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -41,6 +34,27 @@ const ageItems: Record<AgeFilter, string> = {
   adult: "Adult (2 – 6)",
   senior: "Senior (7+)",
 };
+
+const dogSizes: Record<string, string> = {
+  biscuit: "Medium",
+  luna: "Medium",
+  rocky: "Medium",
+  daisy: "Small",
+  max: "Large",
+  pepper: "Small",
+  bruno: "Large",
+  mila: "Medium",
+};
+
+function dogImage(dog: Dog) {
+  const index = initialDogs.findIndex((item) => item.id === dog.id);
+
+  if (index < 0) {
+    return "/images/puppies/puppy1.jpg";
+  }
+
+  return `/images/puppies/puppy${(index % 6) + 1}.jpg`;
+}
 
 function matchesAge(dog: Dog, filter: AgeFilter) {
   switch (filter) {
@@ -120,20 +134,20 @@ export function DogsBrowser() {
   return (
     <div>
       {/* Filters + admin controls */}
-      <div className="flex flex-wrap items-end gap-3">
-        <div className="grid gap-1.5">
-          <Label className="text-xs text-muted-foreground">Age</Label>
+      <div className="flex flex-wrap items-end gap-4">
+        <div className="grid gap-2">
+          <Label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Age</Label>
           <Select
             items={ageItems}
             value={ageFilter}
             onValueChange={(v) => setAgeFilter(v as AgeFilter)}
           >
-            <SelectTrigger className="min-w-36">
+            <SelectTrigger className="h-11 min-w-44 rounded-xl border-[oklch(0.89_0.025_80)] bg-white px-4 shadow-sm transition-all hover:border-[oklch(0.72_0.145_62)]/45 data-open:border-[oklch(0.72_0.145_62)] data-open:ring-3 data-open:ring-[oklch(0.72_0.145_62)]/15">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="rounded-xl border border-[oklch(0.89_0.025_80)] bg-white p-1.5 shadow-xl">
               {Object.entries(ageItems).map(([value, label]) => (
-                <SelectItem key={value} value={value}>
+                <SelectItem key={value} value={value} className="rounded-lg px-3 py-2.5">
                   {label}
                 </SelectItem>
               ))}
@@ -141,19 +155,19 @@ export function DogsBrowser() {
           </Select>
         </div>
 
-        <div className="grid gap-1.5">
-          <Label className="text-xs text-muted-foreground">Breed</Label>
+        <div className="grid gap-2">
+          <Label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Breed</Label>
           <Select
             items={breedItems}
             value={breedFilter}
             onValueChange={(v) => setBreedFilter(v ?? "all")}
           >
-            <SelectTrigger className="min-w-40">
+            <SelectTrigger className="h-11 min-w-52 rounded-xl border-[oklch(0.89_0.025_80)] bg-white px-4 shadow-sm transition-all hover:border-[oklch(0.72_0.145_62)]/45 data-open:border-[oklch(0.72_0.145_62)] data-open:ring-3 data-open:ring-[oklch(0.72_0.145_62)]/15">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="rounded-xl border border-[oklch(0.89_0.025_80)] bg-white p-1.5 shadow-xl">
               {Object.entries(breedItems).map(([value, label]) => (
-                <SelectItem key={value} value={value}>
+                <SelectItem key={value} value={value} className="rounded-lg px-3 py-2.5">
                   {label}
                 </SelectItem>
               ))}
@@ -161,19 +175,19 @@ export function DogsBrowser() {
           </Select>
         </div>
 
-        <div className="grid gap-1.5">
-          <Label className="text-xs text-muted-foreground">Gender</Label>
+        <div className="grid gap-2">
+          <Label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Gender</Label>
           <Select
             items={genderItems}
             value={genderFilter}
             onValueChange={(v) => setGenderFilter(v ?? "all")}
           >
-            <SelectTrigger className="min-w-32">
+            <SelectTrigger className="h-11 min-w-40 rounded-xl border-[oklch(0.89_0.025_80)] bg-white px-4 shadow-sm transition-all hover:border-[oklch(0.72_0.145_62)]/45 data-open:border-[oklch(0.72_0.145_62)] data-open:ring-3 data-open:ring-[oklch(0.72_0.145_62)]/15">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="rounded-xl border border-[oklch(0.89_0.025_80)] bg-white p-1.5 shadow-xl">
               {Object.entries(genderItems).map(([value, label]) => (
-                <SelectItem key={value} value={value}>
+                <SelectItem key={value} value={value} className="rounded-lg px-3 py-2.5">
                   {label}
                 </SelectItem>
               ))}
@@ -181,12 +195,12 @@ export function DogsBrowser() {
           </Select>
         </div>
 
-        <div className="ms-auto flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">
+        <div className="ms-auto flex items-center gap-3 self-end">
+          <span className="rounded-full bg-[oklch(0.94_0.03_82)] px-3 py-2 text-sm font-semibold text-muted-foreground">
             {filtered.length} of {dogs.length} dogs
           </span>
           {isAdmin && (
-            <Button onClick={openAdd}>
+            <Button onClick={openAdd} className="h-11 rounded-xl px-4">
               <Plus data-icon="inline-start" />
               Add dog
             </Button>
@@ -201,43 +215,68 @@ export function DogsBrowser() {
           <p>No dogs match those filters — try widening your search.</p>
         </div>
       ) : (
-        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((dog) => (
-            <Card
+            <button
               key={dog.id}
-              className="group cursor-pointer overflow-hidden pt-0 transition-shadow hover:shadow-md hover:ring-1 hover:ring-primary/40"
+              type="button"
+              className="group relative min-h-[29rem] overflow-hidden rounded-xl bg-[oklch(0.34_0.04_55)] text-left shadow-sm transition-shadow duration-300 hover:shadow-2xl hover:shadow-[oklch(0.72_0.145_62)]/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[oklch(0.72_0.145_62)]"
               onClick={() => openDetails(dog)}
             >
-              <div className="relative">
-                <DogPhoto hue={dog.photoHue} className="h-44 w-full" />
-                {isAdmin && (
-                  <Button
-                    variant="secondary"
-                    size="icon-sm"
-                    className="absolute top-2 right-2 opacity-0 shadow transition-opacity group-hover:opacity-100"
-                    aria-label={`Edit ${dog.name}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      openEdit(dog);
-                    }}
-                  >
-                    <Pencil />
-                  </Button>
-                )}
-              </div>
-              <CardHeader>
-                <div className="flex items-center justify-between gap-2">
-                  <CardTitle>{dog.name}</CardTitle>
-                  <Badge variant="secondary">{dog.gender}</Badge>
+              <Image
+                src={dogImage(dog)}
+                alt=""
+                fill
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                className="object-cover"
+              />
+              <div
+                className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.04)_0%,rgba(0,0,0,0.18)_42%,rgba(0,0,0,0.72)_100%)]"
+                aria-hidden="true"
+              />
+              {isAdmin && (
+                <Button
+                  variant="secondary"
+                  size="icon-sm"
+                  className="absolute right-3 top-3 z-20 opacity-0 shadow transition-opacity group-hover:opacity-100"
+                  aria-label={`Edit ${dog.name}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openEdit(dog);
+                  }}
+                >
+                  <Pencil />
+                </Button>
+              )}
+              <div className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-6">
+                <div className="flex items-end justify-between gap-3">
+                  <div>
+                    <h3 className="font-heading text-4xl font-extrabold tracking-tight">
+                      {dog.name}
+                    </h3>
+                    <p className="mt-1 text-sm font-semibold text-white/82">
+                      {dog.age} {dog.age === 1 ? "year" : "years"} old
+                    </p>
+                  </div>
+                  <span className="rounded-full bg-[oklch(0.72_0.145_62)] px-3 py-1.5 text-xs font-bold text-white shadow-lg shadow-black/10">
+                    {dogSizes[dog.id] ?? "Medium"}
+                  </span>
                 </div>
-                <CardDescription>
-                  {dog.breed} · {dog.age} {dog.age === 1 ? "year" : "years"} old
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="text-sm text-muted-foreground">
-                {dog.shortDescription}
-              </CardContent>
-            </Card>
+                <div className="mt-4 max-h-0 overflow-hidden opacity-0 transition-all duration-300 group-hover:max-h-40 group-hover:opacity-100 group-focus-visible:max-h-40 group-focus-visible:opacity-100">
+                  <p className="max-w-xs text-sm font-medium leading-6 text-white/88">
+                    {dog.shortDescription}
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2 text-xs font-bold text-white/88">
+                    <span>{dog.gender}</span>
+                    <span aria-hidden="true">/</span>
+                    <span>{dog.breed}</span>
+                  </div>
+                  <span className="mt-3 inline-flex text-sm font-extrabold text-[oklch(0.84_0.14_75)]">
+                    View full profile
+                  </span>
+                </div>
+              </div>
+            </button>
           ))}
         </div>
       )}
@@ -247,7 +286,15 @@ export function DogsBrowser() {
         <DialogContent className="overflow-hidden p-0 sm:max-w-md">
           {selected && (
             <>
-              <DogPhoto hue={selected.photoHue} className="h-52 w-full" iconClassName="size-20" />
+              <div className="relative h-64 w-full">
+                <Image
+                  src={dogImage(selected)}
+                  alt=""
+                  fill
+                  sizes="448px"
+                  className="object-cover"
+                />
+              </div>
               <div className="grid gap-4 p-5 pt-0">
                 <DialogHeader>
                   <div className="flex items-center gap-2">
