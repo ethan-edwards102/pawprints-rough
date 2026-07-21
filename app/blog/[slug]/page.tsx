@@ -40,13 +40,11 @@ export default async function BlogPostPage(props: PageProps<"/blog/[slug]">) {
         </span>
       </p>
 
-      {post.photoHue !== null && (
-        <DogPhoto
-          hue={post.photoHue}
-          className="mt-6 h-64 w-full rounded-2xl"
-          iconClassName="size-24"
-        />
-      )}
+      <DogPhoto
+        hue={post.photoHue ?? 62}
+        className="mt-6 h-64 w-full rounded-2xl"
+        iconClassName="size-24"
+      />
 
       <div className="mt-8 space-y-5 text-[0.95rem] leading-7 text-foreground/90">
         {post.body.map((paragraph, i) => (
