@@ -15,6 +15,7 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/dogs", label: "Our Dogs" },
   { href: "/matcher", label: "Dog Matcher" },
+  { href: "/mutt-motel", label: "Mutt Motel" },
   { href: "/volunteer", label: "Volunteer" },
   { href: "/blog", label: "Blog" },
 ];
