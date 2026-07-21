@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CalendarDays, UserRound } from "lucide-react";
 
-import { DogPhoto } from "@/components/dog-photo";
+import { DogPhoto, placeholderHue } from "@/components/dog-photo";
 import {
   Card,
   CardContent,
@@ -31,7 +31,7 @@ export default function BlogPage() {
         {blogPosts.map((post) => (
           <Link key={post.slug} href={`/blog/${post.slug}`} className="block">
             <Card className="h-full overflow-hidden pt-0 transition-shadow hover:shadow-md hover:ring-1 hover:ring-primary/40">
-              <DogPhoto hue={post.photoHue ?? 62} className="h-44 w-full" />
+              <DogPhoto hue={post.photoHue ?? placeholderHue(post.slug)} className="h-44 w-full" />
               <CardHeader>
                 <CardTitle className="text-xl">{post.title}</CardTitle>
                 <CardDescription className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-1">

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, CalendarDays, UserRound } from "lucide-react";
 
-import { DogPhoto } from "@/components/dog-photo";
+import { DogPhoto, placeholderHue } from "@/components/dog-photo";
 import { blogPosts } from "@/lib/data";
 
 export function generateStaticParams() {
@@ -41,7 +41,7 @@ export default async function BlogPostPage(props: PageProps<"/blog/[slug]">) {
       </p>
 
       <DogPhoto
-        hue={post.photoHue ?? 62}
+        hue={post.photoHue ?? placeholderHue(post.slug)}
         className="mt-6 h-64 w-full rounded-2xl"
         iconClassName="size-24"
       />
