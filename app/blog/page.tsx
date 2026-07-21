@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CalendarDays, UserRound } from "lucide-react";
 
-import { DogPhoto } from "@/components/dog-photo";
+import { DogPhoto, placeholderHue } from "@/components/dog-photo";
 import {
   Card,
   CardContent,
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12">
+    <div className="mx-auto max-w-5xl px-4 py-12">
       <section>
         <h1 className="font-heading text-4xl font-bold tracking-tight">From the shelter</h1>
         <p className="mt-4 text-lg text-muted-foreground">
@@ -27,14 +27,12 @@ export default function BlogPage() {
         </p>
       </section>
 
-      <section className="mt-8 flex flex-col gap-6">
+      <section className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
         {blogPosts.map((post) => (
           <Link key={post.slug} href={`/blog/${post.slug}`} className="block">
-            <Card className="overflow-hidden pt-0 transition-shadow hover:shadow-md hover:ring-1 hover:ring-primary/40">
-              {post.photoHue !== null && (
-                <DogPhoto hue={post.photoHue} className="h-44 w-full" />
-              )}
-              <CardHeader className={post.photoHue === null ? "pt-6" : undefined}>
+            <Card className="h-full overflow-hidden pt-0 transition-shadow hover:shadow-md hover:ring-1 hover:ring-primary/40">
+              <DogPhoto hue={post.photoHue ?? placeholderHue(post.slug)} className="h-44 w-full" />
+              <CardHeader>
                 <CardTitle className="text-xl">{post.title}</CardTitle>
                 <CardDescription className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-1">
                   <span className="flex items-center gap-1.5">
