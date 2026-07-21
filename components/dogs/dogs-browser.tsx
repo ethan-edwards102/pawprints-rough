@@ -135,14 +135,14 @@ export function DogsBrowser() {
     <div>
       {/* Filters + admin controls */}
       <div className="flex flex-wrap items-end gap-4">
-        <div className="grid gap-2">
+        <div className="grid w-full gap-2 sm:w-auto">
           <Label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Age</Label>
           <Select
             items={ageItems}
             value={ageFilter}
             onValueChange={(v) => setAgeFilter(v as AgeFilter)}
           >
-            <SelectTrigger className="h-11 min-w-44 rounded-xl border-[oklch(0.89_0.025_80)] bg-white px-4 shadow-sm transition-all hover:border-[oklch(0.72_0.145_62)]/45 data-open:border-[oklch(0.72_0.145_62)] data-open:ring-3 data-open:ring-[oklch(0.72_0.145_62)]/15">
+            <SelectTrigger className="h-11 w-full min-w-44 rounded-xl border-[oklch(0.89_0.025_80)] bg-white px-4 shadow-sm transition-all hover:border-[oklch(0.72_0.145_62)]/45 data-open:border-[oklch(0.72_0.145_62)] data-open:ring-3 data-open:ring-[oklch(0.72_0.145_62)]/15 sm:w-fit">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="rounded-xl border border-[oklch(0.89_0.025_80)] bg-white p-1.5 shadow-xl">
@@ -155,14 +155,14 @@ export function DogsBrowser() {
           </Select>
         </div>
 
-        <div className="grid gap-2">
+        <div className="grid w-full gap-2 sm:w-auto">
           <Label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Breed</Label>
           <Select
             items={breedItems}
             value={breedFilter}
             onValueChange={(v) => setBreedFilter(v ?? "all")}
           >
-            <SelectTrigger className="h-11 min-w-52 rounded-xl border-[oklch(0.89_0.025_80)] bg-white px-4 shadow-sm transition-all hover:border-[oklch(0.72_0.145_62)]/45 data-open:border-[oklch(0.72_0.145_62)] data-open:ring-3 data-open:ring-[oklch(0.72_0.145_62)]/15">
+            <SelectTrigger className="h-11 w-full min-w-52 rounded-xl border-[oklch(0.89_0.025_80)] bg-white px-4 shadow-sm transition-all hover:border-[oklch(0.72_0.145_62)]/45 data-open:border-[oklch(0.72_0.145_62)] data-open:ring-3 data-open:ring-[oklch(0.72_0.145_62)]/15 sm:w-fit">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="rounded-xl border border-[oklch(0.89_0.025_80)] bg-white p-1.5 shadow-xl">
@@ -175,14 +175,14 @@ export function DogsBrowser() {
           </Select>
         </div>
 
-        <div className="grid gap-2">
+        <div className="grid w-full gap-2 sm:w-auto">
           <Label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Gender</Label>
           <Select
             items={genderItems}
             value={genderFilter}
             onValueChange={(v) => setGenderFilter(v ?? "all")}
           >
-            <SelectTrigger className="h-11 min-w-40 rounded-xl border-[oklch(0.89_0.025_80)] bg-white px-4 shadow-sm transition-all hover:border-[oklch(0.72_0.145_62)]/45 data-open:border-[oklch(0.72_0.145_62)] data-open:ring-3 data-open:ring-[oklch(0.72_0.145_62)]/15">
+            <SelectTrigger className="h-11 w-full min-w-40 rounded-xl border-[oklch(0.89_0.025_80)] bg-white px-4 shadow-sm transition-all hover:border-[oklch(0.72_0.145_62)]/45 data-open:border-[oklch(0.72_0.145_62)] data-open:ring-3 data-open:ring-[oklch(0.72_0.145_62)]/15 sm:w-fit">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="rounded-xl border border-[oklch(0.89_0.025_80)] bg-white p-1.5 shadow-xl">
@@ -195,7 +195,7 @@ export function DogsBrowser() {
           </Select>
         </div>
 
-        <div className="ms-auto flex items-center gap-3 self-end">
+        <div className="flex w-full items-center gap-3 self-end sm:ms-auto sm:w-auto">
           <span className="rounded-full bg-[oklch(0.94_0.03_82)] px-3 py-2 text-sm font-semibold text-muted-foreground">
             {filtered.length} of {dogs.length} dogs
           </span>
