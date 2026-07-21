@@ -1,94 +1,110 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { CalendarDays, Clock, MapPin, Users } from "lucide-react";
+import Image from "next/image";
+import { HeartHandshake } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { volunteerEvents } from "@/lib/data";
-import { cn } from "@/lib/utils";
+import { VolunteerEvents } from "@/components/volunteer/volunteer-events";
 
 export const metadata: Metadata = {
   title: "Volunteer",
   description: "Sign up for upcoming Paw Prints volunteer events.",
 };
 
+const bentoImages = [
+  { src: "/images/heroImg.jpg", className: "col-span-2 row-span-2" },
+  {
+    src: "/images/puppies/puppy2.jpg",
+    className: "col-span-1 row-span-2 sm:col-span-2 sm:row-span-1",
+  },
+  {
+    src: "/images/puppies/puppy3.jpg",
+    className: "col-span-1 row-span-2 sm:col-span-1 sm:row-span-1",
+  },
+  { src: "/images/puppies/puppy4.jpg", className: "col-span-1 row-span-1" },
+  {
+    src: "/images/puppies/puppy5.jpg",
+    className: "col-span-1 row-span-1 sm:col-span-2 sm:row-span-2",
+  },
+  {
+    src: "/images/puppies/puppy6.jpg",
+    className: "col-span-2 row-span-1 sm:col-span-2 sm:row-span-2",
+  },
+];
+
 export default function VolunteerPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12">
-      <section className="max-w-3xl">
-        <h1 className="font-heading text-4xl font-bold tracking-tight">Volunteer with us</h1>
-        <p className="mt-4 text-lg text-muted-foreground">
-          Paw Prints runs on volunteers. Whether you can spare a single Saturday for a
-          fundraiser or a few hours every week at the shelter, your time directly changes dogs'
-          lives. Pick an upcoming event below to get started.
-        </p>
+    <div className="bg-[oklch(0.985_0.012_85)]">
+      {/* Hero */}
+      <section className="mx-auto max-w-6xl px-4 pb-16 pt-12 sm:pb-20 sm:pt-16">
+        <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
+          {/* LHS: heading + subtext */}
+          <div>
+            <span className="inline-flex items-center gap-2 rounded-full bg-[oklch(0.72_0.145_62)]/12 px-3.5 py-1.5 text-sm font-bold text-[oklch(0.55_0.14_55)]">
+              <HeartHandshake className="size-4" /> Volunteer with Paw Prints
+            </span>
+            <h1 className="mt-5 font-heading text-5xl font-extrabold leading-[0.95] tracking-tight text-[oklch(0.28_0.035_55)] sm:text-6xl lg:text-7xl">
+              Give a few hours, change a life.
+            </h1>
+            <p className="mt-6 max-w-xl text-base font-medium leading-7 text-muted-foreground sm:text-lg">
+              Paw Prints runs on volunteers. Whether you can spare a single Saturday for a
+              fundraiser or a few hours every week at the shelter, your time directly shapes a
+              dog&apos;s recovery — from walks and enrichment to the events that find them
+              homes. No experience needed, just a love of dogs.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-8">
+              <div>
+                <p className="font-heading text-4xl font-extrabold tracking-tight text-[oklch(0.72_0.145_62)]">
+                  120+
+                </p>
+                <p className="mt-1 text-sm font-semibold text-muted-foreground">
+                  active volunteers
+                </p>
+              </div>
+              <div>
+                <p className="font-heading text-4xl font-extrabold tracking-tight text-[oklch(0.72_0.145_62)]">
+                  2,400
+                </p>
+                <p className="mt-1 text-sm font-semibold text-muted-foreground">
+                  hours given last year
+                </p>
+              </div>
+              <div>
+                <p className="font-heading text-4xl font-extrabold tracking-tight text-[oklch(0.72_0.145_62)]">
+                  310
+                </p>
+                <p className="mt-1 text-sm font-semibold text-muted-foreground">
+                  dogs rehomed since 2012
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* RHS: bento grid of dog photos */}
+          <div className="grid auto-rows-[7.5rem] grid-cols-2 gap-3 sm:grid-cols-4 lg:auto-rows-[8.5rem]">
+            {bentoImages.map((image, index) => (
+              <div
+                key={image.src}
+                className={[
+                  "group relative overflow-hidden rounded-xl shadow-sm ring-1 ring-[oklch(0.89_0.025_80)]",
+                  image.className,
+                ].join(" ")}
+              >
+                <Image
+                  src={image.src}
+                  alt=""
+                  fill
+                  sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 50vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  priority={index === 0}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
-      <section className="mt-10">
-        <h2 className="font-heading text-2xl font-bold tracking-tight">Upcoming events</h2>
-        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {volunteerEvents.map((event) => {
-            const isFull = event.spotsTaken >= event.spotsTotal;
-            const spotsLeft = event.spotsTotal - event.spotsTaken;
-
-            const card = (
-              <Card
-                className={cn(
-                  "h-full transition-shadow",
-                  isFull
-                    ? "opacity-55 grayscale"
-                    : "cursor-pointer hover:shadow-md hover:ring-1 hover:ring-primary/40"
-                )}
-              >
-                <CardHeader>
-                  <div className="flex items-start justify-between gap-2">
-                    <CardTitle>{event.title}</CardTitle>
-                    <Badge variant={isFull ? "outline" : "secondary"} className="shrink-0">
-                      {isFull ? "Fully booked" : `${spotsLeft} spots left`}
-                    </Badge>
-                  </div>
-                  <CardDescription className="space-y-1.5 pt-1">
-                    <span className="flex items-center gap-2">
-                      <CalendarDays className="size-4 shrink-0" /> {event.date}
-                    </span>
-                    <span className="flex items-center gap-2">
-                      <Clock className="size-4 shrink-0" /> {event.time}
-                    </span>
-                    <span className="flex items-center gap-2">
-                      <MapPin className="size-4 shrink-0" /> {event.location}
-                    </span>
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
-                  {event.description}
-                </CardContent>
-                <CardFooter className="mt-auto text-sm">
-                  <span className="flex items-center gap-2 text-muted-foreground">
-                    <Users className="size-4" />
-                    {event.spotsTaken} / {event.spotsTotal} volunteers signed up
-                  </span>
-                </CardFooter>
-              </Card>
-            );
-
-            return isFull ? (
-              <div key={event.id} aria-disabled>
-                {card}
-              </div>
-            ) : (
-              <Link key={event.id} href={`/volunteer/${event.id}`} className="block">
-                {card}
-              </Link>
-            );
-          })}
-        </div>
+      {/* Events */}
+      <section className="mx-auto max-w-6xl px-4 pb-20 sm:pb-24">
+        <VolunteerEvents />
       </section>
     </div>
   );
