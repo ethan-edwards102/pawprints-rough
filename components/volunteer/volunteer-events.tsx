@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { ArrowRight, Clock, MapPin, Pencil, Plus, Tag } from "lucide-react";
+import { Pencil, Plus, Tag } from "lucide-react";
 
 import {
   EventFormDialog,
@@ -91,6 +91,12 @@ export function VolunteerEvents() {
     }
   }
 
+  // Show events with the most open spots first; fully booked ones fall to the end.
+  const sortedEvents = [...events].sort(
+    (a, b) =>
+      b.spotsTotal - b.spotsTaken - (a.spotsTotal - a.spotsTaken)
+  );
+
   return (
     <div>
       <div className="flex flex-wrap items-end justify-between gap-4">
@@ -112,7 +118,7 @@ export function VolunteerEvents() {
       </div>
 
       <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {events.map((event) => {
+        {sortedEvents.map((event) => {
           const isFull = event.spotsTaken >= event.spotsTotal;
           const spotsLeft = event.spotsTotal - event.spotsTaken;
 
@@ -127,7 +133,7 @@ export function VolunteerEvents() {
                   : "hover:-translate-y-1 hover:shadow-xl hover:shadow-[oklch(0.72_0.145_62)]/10",
               ].join(" ")}
             >
-              <div className="relative h-48 w-full overflow-hidden rounded-2xl">
+              <div className="relative -mx-3 -mt-3 aspect-20/15 overflow-hidden rounded-3xl">
                 <Image
                   src={eventImage(event)}
                   alt=""
@@ -153,13 +159,13 @@ export function VolunteerEvents() {
               </div>
 
               <div className="flex flex-1 flex-col px-3 pb-2 pt-5">
-                <div className="flex gap-4">
+                <div className="flex gap-5">
                   {/* Date block */}
-                  <div className="shrink-0 text-center leading-none">
-                    <p className="font-heading text-xs font-bold uppercase tracking-widest text-[oklch(0.72_0.145_62)]">
+                  <div className="w-24 shrink-0 text-center leading-none">
+                    <p className="font-heading text-base font-bold uppercase tracking-widest text-[oklch(0.72_0.145_62)]">
                       {month || "TBC"}
                     </p>
-                    <p className="mt-1 font-heading text-4xl font-extrabold tracking-tight text-[oklch(0.72_0.145_62)]">
+                    <p className="mt-1.5 font-heading text-7xl font-extrabold tracking-tight text-[oklch(0.72_0.145_62)]">
                       {day || "—"}
                     </p>
                   </div>
@@ -172,25 +178,17 @@ export function VolunteerEvents() {
 
                   {/* Content */}
                   <div className="min-w-0 flex-1">
-                    <p className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
-                      <MapPin className="size-3.5 shrink-0" />
-                      <span className="min-w-0 truncate">{event.location}</span>
-                    </p>
-                    <h3 className="mt-1 font-heading text-2xl font-extrabold tracking-tight text-[oklch(0.28_0.035_55)]">
+                    <h3 className="font-heading text-2xl font-extrabold tracking-tight text-[oklch(0.28_0.035_55)]">
                       {event.title}
                     </h3>
                     <p className="mt-1.5 line-clamp-2 text-sm leading-6 text-muted-foreground">
                       {event.description}
                     </p>
-                    <p className="mt-2 flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                      <Clock className="size-3.5 shrink-0" />
-                      {event.time}
-                    </p>
                   </div>
                 </div>
 
                 {/* Footer tag line */}
-                <div className="mt-5 flex items-center justify-between">
+                <div className="mt-5 flex items-center">
                   <span className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Tag className="size-4 shrink-0" />
                     {isFull ? (
@@ -200,16 +198,10 @@ export function VolunteerEvents() {
                         <span className="font-bold text-[oklch(0.28_0.035_55)]">
                           {spotsLeft}
                         </span>{" "}
-                        of {event.spotsTotal} spots left
+                        spots left
                       </span>
                     )}
                   </span>
-                  {!isFull && (
-                    <span className="inline-flex items-center gap-1 text-sm font-extrabold text-[oklch(0.72_0.145_62)]">
-                      Sign up
-                      <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-                    </span>
-                  )}
                 </div>
               </div>
             </article>

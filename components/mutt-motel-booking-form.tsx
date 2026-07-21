@@ -1,197 +1,177 @@
 "use client";
 
 import * as React from "react";
-import { CalendarCheck, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Minus, PawPrint, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { MuttMotelDetailsDialog } from "@/components/mutt-motel-details-dialog";
 
-const roomItems = {
-  cosy: "Cosy Kennel — R220 / night",
-  suite: "Deluxe Suite — R340 / night",
-  luxury: "Luxury Play Loft — R480 / night",
-};
+const PRICE_PER_NIGHT = 220;
+const MAX_DOGS = 4;
 
-type RoomTier = keyof typeof roomItems;
+function nightsBetween(start: string, end: string) {
+  if (!start || !end) return 0;
+  const ms = new Date(end).getTime() - new Date(start).getTime();
+  if (Number.isNaN(ms)) return 0;
+  const nights = Math.round(ms / 86_400_000);
+  return nights > 0 ? nights : 0;
+}
+
+function formatRand(amount: number) {
+  return `R${amount.toLocaleString("en-ZA")}`;
+}
+
+const fieldLabel =
+  "text-xs font-bold uppercase tracking-wide text-[oklch(0.28_0.035_55)]";
+// A full circle whose visible half traces the border around a mask-cut notch.
+// Positioned on the seam (18rem from the right — matches --mm-stub in globals.css).
+const notchArc =
+  "pointer-events-none absolute z-10 hidden size-[26px] rounded-full border border-[oklch(0.89_0.025_80)] lg:block left-[calc(100%-18rem)]";
 
 export function MuttMotelBookingForm() {
-  const [submitted, setSubmitted] = React.useState(false);
-  const [ownerName, setOwnerName] = React.useState("");
-  const [dogName, setDogName] = React.useState("");
-  const [room, setRoom] = React.useState<RoomTier>("cosy");
+  const [dogs, setDogs] = React.useState(1);
+  const [startDate, setStartDate] = React.useState("");
+  const [endDate, setEndDate] = React.useState("");
+  const [dialogOpen, setDialogOpen] = React.useState(false);
 
-  if (submitted) {
-    return (
-      <Card className="border-primary/40 bg-primary/5">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <CheckCircle2 className="size-5 text-primary" />
-            Booking request received!
-          </CardTitle>
-          <CardDescription>
-            Thanks {ownerName || "there"} — we&apos;ve pencilled in a stay for{" "}
-            {dogName || "your pup"} in our {roomItems[room].split(" —")[0]}. Our team will
-            confirm availability and payment details by email within one business day.
-            (Mock submission — nothing was sent.)
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button variant="outline" onClick={() => setSubmitted(false)}>
-            Make another booking
-          </Button>
-        </CardContent>
-      </Card>
-    );
-  }
+  const nights = nightsBetween(startDate, endDate);
+  const total = nights * dogs * PRICE_PER_NIGHT;
+  const stayReady = nights > 0 && dogs >= 1;
+  const today = new Date().toISOString().split("T")[0];
 
   return (
-    <Card id="book">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <CalendarCheck className="size-5 text-primary" />
-          Book a stay
-        </CardTitle>
-        <CardDescription>
-          Tell us about your dog and when you&apos;ll be away. We&apos;ll confirm the
-          booking and share drop-off details.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form
-          className="grid gap-6"
-          onSubmit={(e) => {
-            e.preventDefault();
-            setSubmitted(true);
-          }}
-        >
-          {/* Owner details */}
-          <fieldset className="grid gap-4">
-            <legend className="text-sm font-semibold text-muted-foreground">
-              Your details
-            </legend>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="grid gap-2">
-                <Label htmlFor="owner-name">Full name</Label>
-                <Input
-                  id="owner-name"
-                  required
-                  placeholder="Jane Doe"
-                  value={ownerName}
-                  onChange={(e) => setOwnerName(e.target.value)}
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="owner-phone">Phone number</Label>
-                <Input id="owner-phone" type="tel" required placeholder="082 555 0100" />
-              </div>
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="owner-email">Email</Label>
-              <Input
-                id="owner-email"
-                type="email"
-                required
-                placeholder="jane@example.com"
-              />
-            </div>
-          </fieldset>
-
-          {/* Dog details */}
-          <fieldset className="grid gap-4">
-            <legend className="text-sm font-semibold text-muted-foreground">
-              Your dog
-            </legend>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="grid gap-2">
-                <Label htmlFor="dog-name">Dog&apos;s name</Label>
-                <Input
-                  id="dog-name"
-                  required
-                  placeholder="Rex"
-                  value={dogName}
-                  onChange={(e) => setDogName(e.target.value)}
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="dog-breed">Breed</Label>
-                <Input id="dog-breed" placeholder="Labrador mix" />
-              </div>
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="dog-notes">
-                Care notes{" "}
-                <span className="text-muted-foreground">
-                  (feeding, medication, temperament)
+    <>
+      <div className="relative">
+        <div className="mm-ticket-shadow">
+          <div className="mm-ticket relative rounded-[1.75rem] border border-[oklch(0.89_0.025_80)] bg-white">
+            <div className="flex flex-col lg:flex-row">
+          {/* LHS — the stub */}
+          <div className="flex-1 p-7 sm:p-9">
+            {/* Dog counter */}
+            <div className="grid gap-2.5">
+              <Label className={fieldLabel}>Number of dogs</Label>
+              <div className="flex items-center gap-4">
+                <div className="inline-flex items-center rounded-xl border border-[oklch(0.89_0.025_80)]">
+                  <button
+                    type="button"
+                    onClick={() => setDogs((d) => Math.max(1, d - 1))}
+                    disabled={dogs <= 1}
+                    aria-label="Fewer dogs"
+                    className="flex size-11 items-center justify-center rounded-l-xl text-[oklch(0.28_0.035_55)] transition-colors hover:bg-[oklch(0.985_0.012_85)] disabled:opacity-40"
+                  >
+                    <Minus className="size-4" />
+                  </button>
+                  <span className="w-12 text-center font-heading text-xl font-extrabold text-[oklch(0.28_0.035_55)]">
+                    {dogs}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setDogs((d) => Math.min(MAX_DOGS, d + 1))}
+                    disabled={dogs >= MAX_DOGS}
+                    aria-label="More dogs"
+                    className="flex size-11 items-center justify-center rounded-r-xl text-[oklch(0.28_0.035_55)] transition-colors hover:bg-[oklch(0.985_0.012_85)] disabled:opacity-40"
+                  >
+                    <Plus className="size-4" />
+                  </button>
+                </div>
+                <span className="text-sm font-medium text-muted-foreground">
+                  Up to {MAX_DOGS} dogs per booking
                 </span>
-              </Label>
-              <Textarea
-                id="dog-notes"
-                rows={3}
-                placeholder="Rex eats twice a day, is friendly with other dogs, and needs a tablet with breakfast."
-              />
+              </div>
             </div>
-          </fieldset>
 
-          {/* Stay details */}
-          <fieldset className="grid gap-4">
-            <legend className="text-sm font-semibold text-muted-foreground">
-              The stay
-            </legend>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="grid gap-2">
-                <Label htmlFor="check-in">Drop-off date</Label>
-                <Input id="check-in" type="date" required />
+            {/* From — To dates with connector line */}
+            <div className="mt-8 grid gap-4 sm:grid-cols-[1fr_auto_1fr]">
+              <div className="grid gap-2.5">
+                <Label htmlFor="from-date" className={fieldLabel}>
+                  From
+                </Label>
+                <Input
+                  id="from-date"
+                  type="date"
+                  min={today}
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="h-11 rounded-lg"
+                />
               </div>
-              <div className="grid gap-2">
-                <Label htmlFor="check-out">Pick-up date</Label>
-                <Input id="check-out" type="date" required />
+              <div className="hidden gap-2.5 sm:grid">
+                <span aria-hidden className="text-xs opacity-0">
+                  .
+                </span>
+                <div className="flex h-11 items-center justify-center gap-1.5 text-[oklch(0.72_0.145_62)]">
+                  <span className="h-px w-6 bg-[oklch(0.85_0.03_75)]" />
+                  <PawPrint className="size-4" />
+                  <span className="h-px w-6 bg-[oklch(0.85_0.03_75)]" />
+                </div>
+              </div>
+              <div className="grid gap-2.5">
+                <Label htmlFor="to-date" className={fieldLabel}>
+                  To
+                </Label>
+                <Input
+                  id="to-date"
+                  type="date"
+                  min={startDate || today}
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="h-11 rounded-lg"
+                />
               </div>
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="room">Room type</Label>
-              <Select
-                items={roomItems}
-                value={room}
-                onValueChange={(value) => setRoom(value as RoomTier)}
+            {startDate && endDate && nights === 0 ? (
+              <p className="mt-3 text-sm font-semibold text-destructive">
+                Pick-up needs to be after drop-off.
+              </p>
+            ) : null}
+          </div>
+
+          {/* RHS — the tear-off with price + booking */}
+          <div className="relative border-t border-dashed border-[oklch(0.82_0.03_75)] p-7 sm:p-9 lg:w-72 lg:border-l lg:border-t-0">
+            <div className="flex h-full flex-col">
+              <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
+                Total
+              </p>
+              <p className="mt-1 font-heading text-4xl font-extrabold tracking-tight text-[oklch(0.28_0.035_55)]">
+                {formatRand(total)}
+              </p>
+              <p className="mt-1 text-sm font-medium text-muted-foreground">
+                {formatRand(PRICE_PER_NIGHT)} / night per dog
+              </p>
+
+              <Button
+                className="mt-6 h-12 rounded-xl bg-[oklch(0.72_0.145_62)] px-6 text-base text-white shadow-lg shadow-[oklch(0.72_0.145_62)]/20 hover:bg-[oklch(0.66_0.15_58)] disabled:opacity-40 lg:mt-auto"
+                disabled={!stayReady}
+                onClick={() => setDialogOpen(true)}
               >
-                <SelectTrigger id="room" className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.entries(roomItems).map(([value, label]) => (
-                    <SelectItem key={value} value={value}>
-                      {label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                Book now <ArrowRight className="size-4" />
+              </Button>
             </div>
-          </fieldset>
+          </div>
+            </div>
+          </div>
+        </div>
 
-          <Button type="submit" size="lg">
-            Request booking
-          </Button>
-          <p className="text-xs text-muted-foreground">
-            This is a draft form — submitting won&apos;t reserve a real stay or take payment.
-          </p>
-        </form>
-      </CardContent>
-    </Card>
+        {/* Border arcs tracing the two mask-cut notches (desktop only). */}
+        <span
+          aria-hidden
+          className={`${notchArc} top-0 -translate-x-1/2 -translate-y-1/2 [clip-path:inset(50%_0_0_0)]`}
+        />
+        <span
+          aria-hidden
+          className={`${notchArc} bottom-0 -translate-x-1/2 translate-y-1/2 [clip-path:inset(0_0_50%_0)]`}
+        />
+      </div>
+
+      <MuttMotelDetailsDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        dogs={dogs}
+        nights={nights}
+        total={total}
+      />
+    </>
   );
 }

@@ -156,6 +156,49 @@
   .gallery-column-down {
     animation: gallery-down 52s linear infinite;
   }
+
+  /* Ticket: drop-shadow (not box-shadow) so the shadow follows the notch cutouts. */
+  .mm-ticket-shadow {
+    filter: drop-shadow(0 14px 22px rgba(63, 40, 20, 0.09))
+      drop-shadow(0 4px 8px rgba(63, 40, 20, 0.05));
+  }
+
+  /* Stub width + notch radius shared with the border-arc positions in the component. */
+  .mm-ticket {
+    --mm-stub: 18rem;
+    --mm-notch-r: 13px;
+  }
+}
+
+/* Punch real semicircular notches out of the ticket where the two panels meet. */
+@media (min-width: 1024px) {
+  .mm-ticket {
+    --mm-notch-x: calc(100% - var(--mm-stub));
+    -webkit-mask:
+      radial-gradient(
+          circle var(--mm-notch-r) at var(--mm-notch-x) 0,
+          rgba(0, 0, 0, 0) calc(var(--mm-notch-r) - 0.5px),
+          #000 var(--mm-notch-r)
+        ),
+      radial-gradient(
+          circle var(--mm-notch-r) at var(--mm-notch-x) 100%,
+          rgba(0, 0, 0, 0) calc(var(--mm-notch-r) - 0.5px),
+          #000 var(--mm-notch-r)
+        );
+    -webkit-mask-composite: source-in;
+    mask:
+      radial-gradient(
+          circle var(--mm-notch-r) at var(--mm-notch-x) 0,
+          rgba(0, 0, 0, 0) calc(var(--mm-notch-r) - 0.5px),
+          #000 var(--mm-notch-r)
+        ),
+      radial-gradient(
+          circle var(--mm-notch-r) at var(--mm-notch-x) 100%,
+          rgba(0, 0, 0, 0) calc(var(--mm-notch-r) - 0.5px),
+          #000 var(--mm-notch-r)
+        );
+    mask-composite: intersect;
+  }
 }
 
 @keyframes hero-marquee {
