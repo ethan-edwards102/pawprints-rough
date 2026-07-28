@@ -20,18 +20,23 @@ export function SignupFormDialog({
   open,
   onOpenChange,
   event,
+  onConfirm,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   event: VolunteerEvent | null;
+  /** Called once when a signup is submitted, so the event can claim a spot. */
+  onConfirm?: (eventId: string) => void;
 }) {
   const [submitted, setSubmitted] = React.useState(false);
+  const [wasOpen, setWasOpen] = React.useState(false);
 
-  React.useEffect(() => {
-    if (open) {
-      setSubmitted(false);
-    }
-  }, [open]);
+  // Clear the success screen each time the dialog reopens. Adjusting state during
+  // render rather than in an effect — an effect here cascades an extra render.
+  if (open !== wasOpen) {
+    setWasOpen(open);
+    if (open) setSubmitted(false);
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -66,6 +71,7 @@ export function SignupFormDialog({
               onSubmit={(e) => {
                 e.preventDefault();
                 setSubmitted(true);
+                if (event) onConfirm?.(event.id);
               }}
               className="grid gap-4"
             >

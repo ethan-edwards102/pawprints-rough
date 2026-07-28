@@ -44,7 +44,16 @@ export function EventFormDialog({
   const [description, setDescription] = React.useState("");
   const [spotsTotal, setSpotsTotal] = React.useState("");
 
-  React.useEffect(() => {
+  const [loadedFrom, setLoadedFrom] = React.useState<{
+    open: boolean;
+    event: VolunteerEvent | null;
+  }>({ open: false, event: null });
+
+  // Load the event's values whenever the dialog opens (or swaps to another event).
+  // Adjusting state during render rather than in an effect — an effect here
+  // cascades an extra render before the fields are populated.
+  if (loadedFrom.open !== open || loadedFrom.event !== event) {
+    setLoadedFrom({ open, event });
     if (open) {
       setTitle(event?.title ?? "");
       setDate(event?.date ?? "");
@@ -53,7 +62,7 @@ export function EventFormDialog({
       setDescription(event?.description ?? "");
       setSpotsTotal(event ? String(event.spotsTotal) : "");
     }
-  }, [open, event]);
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

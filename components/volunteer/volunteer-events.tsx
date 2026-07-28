@@ -14,9 +14,14 @@ import { useAuth } from "@/lib/auth";
 import { volunteerEvents as initialEvents, type VolunteerEvent } from "@/lib/data";
 
 function eventImage(event: VolunteerEvent) {
+  // Seeded events keep their order-based photo. Events added in-session aren't in
+  // `initialEvents`, so fall back to a hash of the id — otherwise they'd all share puppy1.
   const index = initialEvents.findIndex((item) => item.id === event.id);
-  const position = index < 0 ? 0 : index;
-  return `/images/puppies/puppy${(position % 6) + 1}.jpg`;
+  const seed =
+    index >= 0
+      ? index
+      : Array.from(event.id).reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  return `/images/puppies/puppy${(seed % 6) + 1}.jpg`;
 }
 
 const MONTHS = [
@@ -72,6 +77,17 @@ export function VolunteerEvents() {
     setSignupOpen(true);
   }
 
+  /** A confirmed signup takes one of the event's remaining spots. */
+  function handleSignupConfirmed(eventId: string) {
+    setEvents((prev) =>
+      prev.map((e) =>
+        e.id === eventId
+          ? { ...e, spotsTaken: Math.min(e.spotsTotal, e.spotsTaken + 1) }
+          : e
+      )
+    );
+  }
+
   function handleFormSubmit(values: EventFormValues) {
     if (editing) {
       setEvents((prev) =>
@@ -124,8 +140,9 @@ export function VolunteerEvents() {
 
           const { month, day } = eventDateParts(event.date);
 
-          const card = (
+          return (
             <article
+              key={event.id}
               className={[
                 "group relative flex h-full flex-col rounded-3xl bg-white p-3 shadow-sm ring-1 ring-[oklch(0.89_0.025_80)] transition-all duration-300",
                 isFull
@@ -145,13 +162,9 @@ export function VolunteerEvents() {
                   <Button
                     variant="secondary"
                     size="icon-sm"
-                    className="absolute right-3 top-3 z-20 opacity-0 shadow transition-opacity group-hover:opacity-100"
+                    className="absolute right-3 top-3 z-20 opacity-0 shadow transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
                     aria-label={`Edit ${event.title}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      openEdit(event);
-                    }}
+                    onClick={() => openEdit(event)}
                   >
                     <Pencil />
                   </Button>
@@ -204,22 +217,19 @@ export function VolunteerEvents() {
                   </span>
                 </div>
               </div>
-            </article>
-          );
 
-          return isFull ? (
-            <div key={event.id} aria-disabled>
-              {card}
-            </div>
-          ) : (
-            <button
-              key={event.id}
-              type="button"
-              onClick={() => openSignup(event)}
-              className="block w-full text-left"
-            >
-              {card}
-            </button>
+              {/* Whole-card click target. A sibling overlay rather than a wrapping
+                  <button>, so the admin edit button isn't nested inside a button. */}
+              {!isFull && (
+                <button
+                  type="button"
+                  onClick={() => openSignup(event)}
+                  className="absolute inset-0 z-10 rounded-3xl focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[oklch(0.72_0.145_62)]/40"
+                >
+                  <span className="sr-only">Sign up for {event.title}</span>
+                </button>
+              )}
+            </article>
           );
         })}
       </div>
@@ -235,6 +245,7 @@ export function VolunteerEvents() {
         open={signupOpen}
         onOpenChange={setSignupOpen}
         event={signupEvent}
+        onConfirm={handleSignupConfirmed}
       />
     </div>
   );

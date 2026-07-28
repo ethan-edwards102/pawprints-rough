@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LogOut, Megaphone, Menu, X } from "lucide-react";
+import { LogOut, Menu, X } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -84,13 +84,7 @@ export function SiteHeader() {
                 isActive(link.href) ? "bg-white/16 text-white" : "text-white/82"
               )}
             >
-              {link.label === "Communications" ? (
-                <span className="flex items-center gap-1.5">
-                  <Megaphone className="size-4" /> {link.label}
-                </span>
-              ) : (
-                link.label
-              )}
+              {link.label}
             </Link>
           ))}
         </nav>

@@ -1,17 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { BellRing, Lock, Megaphone, Send } from "lucide-react";
+import { BellRing, Clock, Lock, Send } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { LoginDialog } from "@/components/login-dialog";
 import { useAuth } from "@/lib/auth";
@@ -35,6 +27,9 @@ const seedHistory: SentNotification[] = [
   },
 ];
 
+const cardShell =
+  "rounded-[1.75rem] border border-[oklch(0.89_0.025_80)] bg-white shadow-sm";
+
 export function CommunicationCenter() {
   const { user } = useAuth();
   const [message, setMessage] = React.useState("");
@@ -43,21 +38,21 @@ export function CommunicationCenter() {
 
   if (user?.role !== "admin") {
     return (
-      <Card className="mx-auto max-w-md text-center">
-        <CardHeader>
-          <span className="mx-auto mb-1 flex size-12 items-center justify-center rounded-full bg-muted">
-            <Lock className="size-5 text-muted-foreground" />
-          </span>
-          <CardTitle>Staff only</CardTitle>
-          <CardDescription>
-            The communication center is for Paw Prints staff. Sign in with an admin account to
-            send push notifications.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex justify-center">
+      <div className={`${cardShell} mx-auto max-w-md p-8 text-center sm:p-10`}>
+        <span className="mx-auto flex size-14 items-center justify-center rounded-full bg-[oklch(0.72_0.145_62)]/12">
+          <Lock className="size-6 text-[oklch(0.72_0.145_62)]" />
+        </span>
+        <h2 className="mt-5 font-heading text-3xl font-extrabold tracking-tight text-[oklch(0.28_0.035_55)]">
+          Staff only
+        </h2>
+        <p className="mt-3 text-base leading-7 text-muted-foreground">
+          The communication center is for Paw Prints staff. Sign in with an admin account to
+          send push notifications.
+        </p>
+        <div className="mt-7 flex justify-center">
           <LoginDialog />
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
@@ -79,60 +74,84 @@ export function CommunicationCenter() {
   }
 
   return (
-    <div className="mx-auto grid max-w-2xl gap-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Megaphone className="size-5 text-primary" />
+    <div>
+      {/* Compose */}
+      <section>
+        <div className="max-w-2xl">
+          <h2 className="font-heading text-3xl font-extrabold tracking-tight text-[oklch(0.28_0.035_55)] sm:text-4xl">
             Send a push notification
-          </CardTitle>
-          <CardDescription>
+          </h2>
+          <p className="mt-3 text-base font-medium leading-7 text-muted-foreground sm:text-lg">
             The message goes out to everyone with the Paw Prints app installed. Keep it short
             and friendly.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSend} className="grid gap-3">
-            <Textarea
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              rows={4}
-              maxLength={240}
-              placeholder="e.g. Our Spring Adoption Fair is this Saturday at Green Point Park…"
-              required
-            />
-            <div className="flex items-center justify-between gap-3">
-              <span className="text-xs text-muted-foreground">{message.length} / 240</span>
-              <Button type="submit" disabled={!message.trim()}>
-                <Send data-icon="inline-start" />
-                Send notification
-              </Button>
-            </div>
-            {justSent && (
-              <p className="flex items-center gap-2 rounded-lg bg-primary/10 p-3 text-sm text-primary">
-                <BellRing className="size-4" />
-                Notification sent! (Mock — nothing actually went out.)
-              </p>
-            )}
-          </form>
-        </CardContent>
-      </Card>
+          </p>
+        </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Recently sent</CardTitle>
-        </CardHeader>
-        <CardContent className="grid gap-3">
+        <form onSubmit={handleSend} className={`${cardShell} mt-8 p-7 sm:p-9`}>
+          <label
+            htmlFor="notification-message"
+            className="text-xs font-bold uppercase tracking-wide text-[oklch(0.28_0.035_55)]"
+          >
+            Message
+          </label>
+          <Textarea
+            id="notification-message"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            rows={4}
+            maxLength={240}
+            placeholder="e.g. Our Spring Adoption Fair is this Saturday at Green Point Park…"
+            required
+            className="mt-2.5 rounded-xl border-[oklch(0.89_0.025_80)] text-base leading-7 focus-visible:border-[oklch(0.72_0.145_62)] focus-visible:ring-[oklch(0.72_0.145_62)]/25"
+          />
+          <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
+            <span className="text-sm font-semibold text-muted-foreground">
+              {message.length} / 240
+            </span>
+            <Button
+              type="submit"
+              disabled={!message.trim()}
+              className="h-12 rounded-xl bg-[oklch(0.72_0.145_62)] px-7 font-heading text-base font-bold text-white shadow-lg shadow-[oklch(0.72_0.145_62)]/25 transition-all hover:bg-[oklch(0.66_0.15_58)] disabled:shadow-none"
+            >
+              <Send data-icon="inline-start" />
+              Send notification
+            </Button>
+          </div>
+          {justSent && (
+            <p className="mt-5 flex items-center gap-2.5 rounded-xl bg-[oklch(0.72_0.145_62)]/10 px-4 py-3.5 text-sm font-semibold text-[oklch(0.55_0.14_55)]">
+              <BellRing className="size-4 shrink-0" />
+              Notification sent! (Mock — nothing actually went out.)
+            </p>
+          )}
+        </form>
+      </section>
+
+      {/* History — deliberately not wrapped in a card; each entry is its own card. */}
+      <section className="mt-16">
+        <div className="max-w-2xl">
+          <h2 className="font-heading text-3xl font-extrabold tracking-tight text-[oklch(0.28_0.035_55)] sm:text-4xl">
+            Recently sent
+          </h2>
+          <p className="mt-3 text-base font-medium leading-7 text-muted-foreground sm:text-lg">
+            The last few notifications that went out to supporters.
+          </p>
+        </div>
+
+        <div className="mt-8 grid gap-4">
           {history.map((item) => (
-            <div key={item.id} className="rounded-xl border p-3">
-              <p className="text-sm">{item.message}</p>
-              <Badge variant="outline" className="mt-2 text-xs font-normal text-muted-foreground">
+            <article
+              key={item.id}
+              className="rounded-2xl border border-[oklch(0.89_0.025_80)] bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+            >
+              <p className="text-base leading-7 text-[oklch(0.28_0.035_55)]">{item.message}</p>
+              <p className="mt-3 flex items-center gap-2 text-sm font-semibold text-muted-foreground">
+                <Clock className="size-4 shrink-0" />
                 {item.sentAt}
-              </Badge>
-            </div>
+              </p>
+            </article>
           ))}
-        </CardContent>
-      </Card>
+        </div>
+      </section>
     </div>
   );
 }
